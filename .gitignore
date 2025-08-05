@@ -26,6 +26,11 @@ _ReSharper.*
 TestResults/
 coverage/
 
+# Dependencies
+packages/
+node_modules/
+jspm_packages/
+
 # Configs (exclude local/dev settings)
 appsettings.Development.json
 appsettings.Local.json
