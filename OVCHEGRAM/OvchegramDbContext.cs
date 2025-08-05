@@ -18,7 +18,6 @@ public class OvchegramDbContext : DbContext
     public DbSet<ConversationEntity> Conversations { get; set; }
     public DbSet<FileEntity> Files { get; set; }
     public DbSet<MessageEntity> Messages { get; set; }
-    public DbSet<PersonalConversationsView?> PersonalConversationsView { get; set; }
     public DbSet<UsersConversationEntity?> UsersConversation { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -41,7 +40,6 @@ public class OvchegramDbContext : DbContext
         modelBuilder.ApplyConfiguration(new ConversationConfiguration());
         modelBuilder.ApplyConfiguration(new FileConfiguration());
         modelBuilder.ApplyConfiguration(new UsersConversationConfiguration());
-        modelBuilder.Entity<PersonalConversationsView>().ToView("personalconversations").HasNoKey();
         base.OnModelCreating(modelBuilder);
     }
 

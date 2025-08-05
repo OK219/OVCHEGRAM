@@ -23,6 +23,6 @@ public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
         builder.HasOne(x => x.ProfilePic)
             .WithMany(x => x.Users)
             .OnDelete(DeleteBehavior.Cascade);
-        builder.Property(x => x.ProfilePicId).HasDefaultValue(4);
+        builder.Property(x => x.ProfilePicId);
     }
 }

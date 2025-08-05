@@ -11,7 +11,7 @@ public class UserEntity
     public string Password { get; set; }
     public string Town { get; set; }
     public Gender? Gender { get; set; }
-    public int ProfilePicId { get; set; }
+    public int? ProfilePicId { get; set; }
     public FileEntity ProfilePic { get; set; }
     public List<MessageEntity> Messages;
     public List<UsersConversationEntity> UsersConversations { get; set; }
