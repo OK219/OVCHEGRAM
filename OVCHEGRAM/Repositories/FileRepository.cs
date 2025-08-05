@@ -16,14 +16,14 @@ public class FileRepository(OvchegramDbContext dbContext, FileManager fileManage
 
     public async Task<string> GetFilePathByIdAsync(int? id = null)
     {
-        if (id == null) return "/UserUploads/default.png";
+        if (id == null) return "/Pictures/default.png";
         var name = await dbContext.Files.FirstOrDefaultAsync(x => x.Id == id);
         return "/UserUploads/" + name.FileName;
     }
     
     public static string GetFilePathByName(string name = null)
     {
-        if (string.IsNullOrEmpty(name)) return "/UserUploads/default.png";
+        if (string.IsNullOrEmpty(name)) return "/Pictures/default.png";
         return "/UserUploads/" + name;
     }
 }

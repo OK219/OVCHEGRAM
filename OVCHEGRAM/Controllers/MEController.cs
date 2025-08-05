@@ -90,7 +90,7 @@ public class MEController : Controller
     [HttpPost]
     public async Task<IActionResult> CreateGroupChat(string groupTitle, IFormFile file, IEnumerable<int> userIds)
     {
-        var fileId = 4;
+        int? fileId = null;
         if (file != null)
             fileId = await _fileRepository.UploadFileAsync(file);
         var conversationId =

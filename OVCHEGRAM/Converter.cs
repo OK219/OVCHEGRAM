@@ -14,7 +14,7 @@ public static class Converter
             FilePath = x.FileId != null ? FileRepository.GetFilePathByName(x.File.FileName) : "",
             UserId = x.UserId, Id = x.Id, isImage = x.FileId != null && x.File.isImage, SendTime = x.CreateTime,
             SenderName = x.User.FirstName + " " + x.User.SecondName,
-            ProfilePicPath = FileRepository.GetFilePathByName(x.User.ProfilePic.FileName)
+            ProfilePicPath = FileRepository.GetFilePathByName(x.User.ProfilePic?.FileName)
         });
     }
     

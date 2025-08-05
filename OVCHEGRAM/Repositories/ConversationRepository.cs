@@ -29,7 +29,7 @@ public class ConversationRepository(OvchegramDbContext dbContext) : BaseReposito
             .Select(x => x.User);
     }
 
-    public async Task<int> CreateGroupChatAsync(List<int> userIds, string groupTitle, int curUser, int fileId = 4)
+    public async Task<int> CreateGroupChatAsync(List<int> userIds, string groupTitle, int curUser, int? fileId)
     {
         await using var transaction = await dbContext.Database.BeginTransactionAsync();
         var conversation = new ConversationEntity() { IsGroupChat = true };
@@ -48,7 +48,7 @@ public class ConversationRepository(OvchegramDbContext dbContext) : BaseReposito
     }
 
     private async Task AddEntriesGroupChatAsync(int conversationId, IEnumerable<int> usersId, string title,
-        int fileId = 4)
+        int? fileId)
     {
         IEnumerable<UsersConversationEntity?> entries = usersId.Select(userId => new UsersConversationEntity
         {

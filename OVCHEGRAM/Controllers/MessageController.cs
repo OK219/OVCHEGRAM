@@ -35,7 +35,7 @@ public class MessageController : Controller
         var conversation = await _conversationRepository.GetUserConversationAsync(userId, conversationId);
         if (conversation == null)
             return Forbid();
-        var conversationPicPath = FileRepository.GetFilePathByName(conversation.File.FileName);
+        var conversationPicPath = FileRepository.GetFilePathByName(conversation.File?.FileName);
         var messages = await _messagesRepository.GetLastMessagesAsync(x => x.ConversationId == conversationId);
         if (messages.Count > 0)
             await _conversationRepository.UpdateLastSeenMessageAsync(conversationId, userId, messages[0]);
