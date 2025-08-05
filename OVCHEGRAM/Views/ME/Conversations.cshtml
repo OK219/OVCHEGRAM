@@ -1,0 +1,62 @@
+@model List<ConversationModel>
+
+@{
+    Layout = "_OvchegramLayout";
+    var months = new Dictionary<int, string>
+    {
+        {1, "января"},
+        {2, "февраля"},
+        {3, "марта"},
+        {4, "апреля"},
+        {5, "мая"},
+        {6, "июня"},
+        {7, "июля"},
+        {8, "августа"},
+        {9, "сентября"},
+        {10, "октября"},
+        {11, "ноября"},
+        {12, "декабря"}
+    };
+}
+
+<link rel="stylesheet" href="~/css/ModalConversation.css"/>
+<link rel="stylesheet" href="~/css/ChangeProfilePic.css"/>
+
+<button id="openModalBtn" class="open-modal-btn">Создать беседу</button>
+
+<div id="modalOverlay" class="modal-overlay">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <input id="group-Title" placeholder="Введите название"/>
+        <div id="addedUsers"></div>
+        <input id="user-input" placeholder="Добавьте участников"/>
+        <div id="user-list"></div>
+        <div id="profileEditPic"></div>
+        <label for="fileLoad">
+            Изменить аватар
+            <input type="file" name="File" id="fileLoad" accept="image/*" style="display: none"/>
+        </label>
+        <button id="confirm-btn">Создать беседу</button>
+    </div>
+</div>
+
+@foreach (var conversation in @Model)
+{
+    var messageTime = conversation.LastMessageTime.Hour + ":" + (conversation.LastMessageTime.Minute > 9 ? "" : "0") + conversation.LastMessageTime.Minute;
+    <a asp-controller="Message" asp-action="Conversation" asp-route-conversationId=@conversation.ConversationId>
+        <div class="conversation">
+            <img class="profilePic" src="@conversation.ConversationPictureName" alt="oi"/>
+            <p class="conversationTitle">@conversation.ConversationTitle</p>
+            <p class="conversationLastMessage">@conversation.LastMessageContent</p>
+            <p class="conversationLastMessageTime">@conversation.LastMessageTime.Day @months[conversation.LastMessageTime.Month] @conversation.LastMessageTime.Year @messageTime</p>
+            @if (conversation.HasNewMessages)
+            {
+                <div class="haveNewMessages"></div>
+            }
+        </div>
+    </a>
+    
+}
+
+<script src="~/js/ModalWindow.js"></script>
+<script src="~/js/changeProfilePic.js"></script>

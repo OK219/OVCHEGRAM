@@ -1,0 +1,35 @@
+@model LoginViewModel
+@{
+    Layout = "_OvchegramLayout";
+}
+
+<link rel="stylesheet" href="~/css/Login.css"/>
+
+<div class="text-center">
+    <h1 class="display-4">Вход</h1>
+</div>
+
+<div class="auth-form">
+    <form asp-controller="Auth" asp-action="Login" method="post">
+        <label asp-for="Nickname" class="col-form-label">
+            Логин
+            <input asp-for="Nickname" type="text" name="nickname" class="input-group-text">
+        </label>
+        <label asp-for="Password">
+            Пароль
+            <input asp-for="Password" type="password" name="password" class="input-group-text">
+        </label>
+        <input type="checkbox" asp-for="StayLogIn"/> Запомни меня
+        <label>
+            <input type="submit" value="Войти"/>
+        </label>
+    </form>
+    <p><a asp-area="" asp-controller="Auth" asp-action="Registration">Ещё не заригестрированы?</a></p>
+</div>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @Html.ValidationSummary()
+    </div>
+}

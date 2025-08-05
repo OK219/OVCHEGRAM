@@ -1,0 +1,57 @@
+@using System.Security.Claims
+@model (UserProfileModel, bool)
+
+@{
+    Layout = "_OvchegramLayout";
+    var user = Model.Item1;
+    var isAllowed = Model.Item2;
+}
+
+<link rel="stylesheet" href="~/css/Profile.css"/>
+<link rel="stylesheet" href="~/css/ChangeProfilePic.css"/>
+
+<div class="text-center">
+    <div id="userInfo">
+        <img src="@user.FilePath" alt="oi" id="profilePic"></img>
+        <h1 id="userName">@user.FirstName @user.SecondName</h1>
+        <p id="userGender">@user.Gender</p>
+        <p id="userTown">@user.Town</p>
+        @if (isAllowed)
+        {
+            <button id="editBtn">Редактировать</button>
+            <form>
+                <button type="submit" asp-controller="ME" asp-action="LogOut">Выйти</button>
+            </form>
+        }
+    </div>
+    <div id="userEdit">
+        <form asp-controller="ME" asp-action="ChangeProfile" method="post" enctype="multipart/form-data">
+            <div id="profileEditPic">
+                <img src="@user.FilePath" alt="oi" id="imgPreview">
+            </div>
+            <label for="fileLoad">
+                Изменить аватар
+                <input type="file" name="File" id="fileLoad" asp-for="Item1.File" accept="image/*" style="display: none"/>
+            </label>
+            <input name="FirstName" asp-for="Item1.FirstName"/>
+            <input name="SecondName" asp-for="Item1.SecondName"/>
+            <label class="col-form-label">
+                Город
+                <select name="town" id="citySelect" class="input-group-text" asp-for="Item1.Town">
+                    <option selected>@user.Town</option>
+                </select>
+            </label>
+            <label>
+                <input type="radio" name="gender" value="Man" class="input-group-text" asp-for="Item1.Gender"> Man
+                <input type="radio" name="gender" value="Woman" class="input-group-text" asp-for="Item1.Gender"> Woman
+            </label>
+            <button type="submit" id="saveBtn">Сохранить</button>
+        </form>
+        <button id="cancelBtn">Отменить</button>
+    </div>
+    
+</div>
+
+<script src="~/js/Profile.js"></script>
+<script src="~/js/changeProfilePic.js"></script>
+<script src="~/js/cities.js"></script>

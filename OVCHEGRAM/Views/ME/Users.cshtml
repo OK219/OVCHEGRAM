@@ -1,0 +1,15 @@
+@model IEnumerable<UserProfileModel>
+
+@{
+    Layout = "_OvchegramLayout";
+}
+
+<link rel="stylesheet" href="~/css/Users.css"/>
+
+<input class="" type="text" id="filter"/>
+<div id="items-container">
+    <partial name="_PartialUsers" model="Model"/>
+</div>
+
+<div id="loading"></div>
+<script src="~/js/Users.js"></script>

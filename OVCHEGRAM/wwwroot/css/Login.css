@@ -1,0 +1,157 @@
+/* Основные стили страницы */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.text-center {
+    text-align: center;
+    padding: 40px 0 20px;
+}
+
+.display-4 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #2c3e50;
+}
+
+/* Форма входа */
+.auth-form {
+    max-width: 450px;
+    margin: 0 auto 40px;
+    padding: 30px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    flex-grow: 1;
+}
+
+/* Стили для полей ввода */
+label {
+    display: block;
+    margin-bottom: 20px;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.input-group-text {
+    width: 100%;
+    padding: 12px 15px;
+    margin-top: 8px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s;
+    box-sizing: border-box;
+}
+
+.input-group-text:focus {
+    border-color: #4a90e2;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+/* Чекбокс "Запомни меня" */
+input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+    vertical-align: middle;
+}
+
+/* Кнопка входа */
+input[type="submit"] {
+    width: 100%;
+    padding: 14px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin: 25px 0 15px;
+}
+
+input[type="submit"]:hover {
+    background-color: #3a7bc8;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(58, 123, 200, 0.3);
+}
+
+/* Ссылка на регистрацию */
+.auth-form p {
+    text-align: center;
+    margin-top: 20px;
+    color: #7f8c8d;
+}
+
+.auth-form a {
+    color: #4a90e2;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.auth-form a:hover {
+    color: #3a7bc8;
+    text-decoration: underline;
+}
+
+/* Сообщения об ошибках */
+.alert-danger {
+    max-width: 450px;
+    margin: 0 auto 20px;
+    padding: 15px;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 8px;
+    color: #721c24;
+    list-style-type: none;
+}
+
+/* Дополнительные стили для чекбокса */
+.stay-login-container {
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+}
+
+.stay-login-container label {
+    margin: 0;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+    .auth-form {
+        padding: 25px 20px;
+        margin: 0 15px 30px;
+    }
+
+    .display-4 {
+        font-size: 2rem;
+    }
+
+    .text-center {
+        padding: 30px 0 15px;
+    }
+}
+
+/* Анимация формы */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.auth-form {
+    animation: fadeIn 0.4s ease-out;
+}

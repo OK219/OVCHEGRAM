@@ -1,0 +1,43 @@
+@model (string conversationPicPath, string Title, IEnumerable<MessageModel> messages, IEnumerable<UserProfileModel> users)
+
+@{
+    Layout = "_OvchegramLayout";
+}
+<link rel="stylesheet" href="~/css/Conversation.css"/>
+<div id="users">
+    @foreach (var user in Model.users)
+    {
+        <div class="user">
+            <img class="userProfilePic" src="@user.FilePath" alt="oi"/>
+            <p class="userName">@user.FirstName @user.SecondName</p>
+        </div>
+    }
+</div>
+<div id="userInfo">
+    <img id="profilePic" src="@Model.conversationPicPath" alt="oi"/>
+    <p id="conversationTitle">@Model.Title</p>
+    <button id="showUsers">Подробнее</button>
+</div>
+
+<div id="message-field">
+    <p id="message-old-load"></p>
+    <partial name="_PartialMessages" model="@Model.messages"/>
+</div>
+<div id="modalOverlay" class="modal-overlay">
+    <div class="modal-content">
+        <span id="close-modal">&times;</span>
+        <div id="imgPreview"></div>
+        <form>
+            <input id="modalInput"/>
+            <button id="modalSendMessageBtn">Отправить</button>
+        </form>
+    </div>
+</div>
+<form id="send-form">
+    <input id="message-input" type="text"/>
+    <button id="send-message-btt" type="submit" disabled> отправить</button>
+    <label for="uploadFile">
+        <input type="file" name="uploadFile" id="uploadFile"/>
+    </label>
+</form>
+<script src="~/js/Messages.js"></script>

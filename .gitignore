@@ -43,8 +43,7 @@ appsettings.private.*
 **/.env
 
 # Migrations (exclude everything except .cs files)
-**/Migrations/*.designer.cs
-**/Migrations/*.resx
+**/Migrations/
 
 # Frontend (if applicable)
 dist/

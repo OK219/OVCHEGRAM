@@ -1,0 +1,62 @@
+@model RegistrationViewModel
+@{
+    Layout = "_OvchegramLayout";
+}
+<link rel="stylesheet" href="~/css/Registration.css"/>
+<link rel="stylesheet" href="~/css/ChangeProfilePic.css"/>
+<div class="text-center">
+    <h1 class="display-4">Регистрация</h1>
+    <p>Расскажите о себе</p>
+</div>
+
+<div class="auth-form">
+    <form asp-controller="Auth" asp-action="Registration" method="post" enctype="multipart/form-data">
+        <label asp-for="FirstName" class="col-form-label">
+            Имя
+            <input asp-for="FirstName" type="text" name="firstname" class="input-group-text">
+        </label>
+        <label asp-for="SecondName">
+            Фамилия
+            <input asp-for="SecondName" type="text" name="secondName" class="input-group-text">
+        </label>
+        <label asp-for="Town" class="col-form-label">
+            Город
+            <select asp-for="Town" name="town" id="citySelect" class="input-group-text">
+                <option value="" selected disabled>Выберите город</option>
+            </select>
+        </label>
+        <label asp-for="Gender">
+            <input asp-for="Gender" type="radio" name="gender" value="Man" class="input-group-text"> Man
+            <input asp-for="Gender" type="radio" name="gender" value="Woman" class="input-group-text"> Woman
+        </label>
+        <label asp-for="Nickname" class="col-form-label">
+            Логин
+            <input asp-for="Nickname" type="text" name="nickname" class="input-group-text">
+        </label>
+        <label asp-for="Password">
+            Пароль
+            <input asp-for="Password" type="password" name="password" class="input-group-text">
+        </label>
+        <input type="checkbox" asp-for="StayLogIn"/> Запомни меня
+        <label for="fileLoad">
+            Выбрать аватар
+            <input type="file" id="fileLoad" name="file" asp-for="File"/>
+        </label>
+        <div id="profileEditPic"></div>
+        <label>
+            <input type="submit" value="Зарегистрироваться"/>
+        </label>
+    </form>
+    <p><a asp-area="" asp-controller="Auth" asp-action="Login">Уже есть аккаунт?</a></p>
+</div>
+
+<script src="~/js/cities.js"></script>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @Html.ValidationSummary()
+    </div>
+}
+
+<script src="~/js/changeProfilePic.js"></script>

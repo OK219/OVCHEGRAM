@@ -1,0 +1,14 @@
+@using System.Security.Claims
+@model IEnumerable<UserProfileModel>
+
+@foreach (var item in Model)
+{
+    @if (int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)) != item.Id)
+    {
+        <div class="user">
+            <img class="profilePic" src="@item.FilePath" alt="@item.Id profilePic">
+            <p class="userName">@item.FirstName @item.SecondName</p>
+            <p class="userId">@item.Id</p>
+        </div>
+    }
+}

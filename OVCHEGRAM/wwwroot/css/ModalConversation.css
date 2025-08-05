@@ -1,0 +1,316 @@
+/* Основные стили страницы */
+body {
+    background-color: #f5f5f7;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Контейнер списка бесед */
+.conversation-list {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+/* Кнопка создания беседы */
+.open-modal-btn {
+    display: block;
+    width: 200px;
+    padding: 12px 20px;
+    margin: 0 auto 25px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
+}
+
+.open-modal-btn:hover {
+    background-color: #0069d9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* Карточка беседы */
+.conversation {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    background-color: #c7dbd2;
+    transition: background-color 0.2s;
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+}
+
+.conversation:hover {
+    background-color: #f9f9f9;
+}
+
+.profilePic {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+    border: 2px solid #e0e0e0;
+}
+
+/* Контент беседы */
+.conversation-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.conversationTitle {
+    font-weight: 600;
+    font-size: 16px;
+    margin: 0 0 5px 0;
+    color: #222;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.conversationLastMessage {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Время и дата */
+.conversationLastMessageTime {
+    font-size: 12px;
+    color: #999;
+    margin: 5px 0 0 0;
+    text-align: right;
+    position: absolute;
+    right: 20px;
+    top: 15px;
+}
+
+/* Индикатор новых сообщений */
+.haveNewMessages {
+    position: absolute;
+    right: 20px;
+    bottom: 15px;
+    width: 12px;
+    height: 12px;
+    background-color: #007bff;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px white;
+}
+
+
+/* Стили для списка пользователей */
+.user {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.user:hover {
+    background-color: #f8f9fa;
+}
+
+.user .profilePic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 12px;
+    border: 1px solid #e0e0e0;
+}
+
+.user .userName {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+    margin: 0;
+    flex-grow: 1;
+}
+
+.user .userId {
+    display: none; /* Скрываем ID пользователя */
+}
+
+/* Улучшенные стили для модального окна */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+    scroll-behavior: auto;
+    overflow: scroll;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 450px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 24px;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-modal:hover {
+    color: #333;
+}
+
+/* Стили для формы создания группы */
+#group-Title {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: border 0.3s;
+}
+
+#group-Title:focus {
+    border-color: #4a90e2;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+#user-input {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+/* Стили для добавленных пользователей */
+#addedUsers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+    min-height: 40px;
+}
+
+[id^="addedUser"] {
+    background-color: #f0f8ff;
+    padding: 8px 12px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    border: 1px solid #d0e3ff;
+}
+
+[id^="deleteUser"] {
+    color: #666;
+    cursor: pointer;
+    font-size: 16px;
+    transition: color 0.2s;
+}
+
+[id^="deleteUser"]:hover {
+    color: #ff4d4d;
+}
+
+/* Стили для списка пользователей при поиске */
+#user-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+/* Кнопка подтверждения */
+#confirm-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 10px;
+}
+
+#confirm-btn:hover {
+    background-color: #3a7bc8;
+    transform: translateY(-1px);
+}
+
+#confirm-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Анимация при добавлении пользователя */
+@keyframes userAdded {
+    0% { transform: scale(0.9); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+[id^="addedUser"] {
+    animation: userAdded 0.3s ease-out;
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 20px 15px;
+    }
+
+    #group-Title, #user-input {
+        padding: 10px 12px;
+    }
+
+    #confirm-btn {
+        padding: 10px;
+    }
+}

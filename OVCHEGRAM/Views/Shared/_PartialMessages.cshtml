@@ -1,0 +1,65 @@
+@using System.Security.Claims
+@using System.Text.RegularExpressions
+@using OVCHEGRAM.Extensions
+@model IEnumerable<MessageModel>
+@{
+    var messages = Model.Reverse();
+    var prevDayTime = DateTime.MinValue;
+    var months = new Dictionary<int, string>
+    {
+        {1, "января"},
+        {2, "февраля"},
+        {3, "марта"},
+        {4, "апреля"},
+        {5, "мая"},
+        {6, "июня"},
+        {7, "июля"},
+        {8, "августа"},
+        {9, "сентября"},
+        {10, "октября"},
+        {11, "ноября"},
+        {12, "декабря"}
+    };
+}
+@foreach (var item in messages)
+{
+    var localSendTime = item.SendTime.ToLocalTime();
+    var messageTime = localSendTime.Hour + ":" + (localSendTime.Minute > 9 ? "" : "0") + localSendTime.Minute;
+    @if (prevDayTime != DateTime.MinValue && prevDayTime.Day < localSendTime.Day)
+    {
+        <p>@item.SendTime.Day @months[localSendTime.Month] @localSendTime.Year</p>
+    }
+
+    var messageClass = User.GetUserId() != item.UserId ? "message" : "my-message";
+    <div class="fullMessage">
+        @if (messageClass == "message")
+        {
+            <a asp-controller="ME" asp-action="Profile" asp-route-id="@item.UserId">
+                <img class="profilePic" src="@item.ProfilePicPath" alt="oi"/>
+                <p class="userName">@item.SenderName</p>
+            </a>
+        }
+        <div class="@messageClass">
+            @if (!string.IsNullOrEmpty(item.FilePath))
+            {
+                @if (item.isImage)
+                {
+                    <img class="messageImg" src="@item.FilePath" alt="oi"/>
+                }
+                else
+                {
+                    <a href="@item.FilePath" download>@item.FilePath.Split('/')[^1].Split('_')[^1]</a>
+                }
+            }
+            @if (!string.IsNullOrEmpty(item.Content))
+            {
+                <p class="messageContent">@Regex.Replace(item.Content, ".{45}", "$0\n")</p>
+            }
+            <p class="messageTime">@messageTime</p>
+            <p class="messageId">@item.Id</p>
+        </div>
+    </div>
+    
+
+    prevDayTime = item.SendTime;
+}
