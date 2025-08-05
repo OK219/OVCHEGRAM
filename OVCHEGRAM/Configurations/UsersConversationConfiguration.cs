@@ -24,7 +24,6 @@ public class UsersConversationConfiguration : IEntityTypeConfiguration<UsersConv
             .HasForeignKey(x => x.PictureId);
         builder.HasOne(x => x.LastMessageSeen)
             .WithMany(x => x.UsersConversation)
-            .HasForeignKey(x => x.PictureId);
-        builder.Property(x => x.PictureId).HasDefaultValue(4);
+            .HasForeignKey(x => x.LastMessageSeenId);
     }
 }

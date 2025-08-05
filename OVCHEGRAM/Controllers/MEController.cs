@@ -116,9 +116,9 @@ public class MEController : Controller
     public async Task<IActionResult> RedirectToPersonalConversation(int id1)
     {
         var userId = User.GetUserId();
-        var conversation = await _conversationRepository.GetByUsersIdAsync(id1, userId);
-        if (conversation != null)
-            return RedirectToAction("Conversation", "Message", new { conversationId = conversation.conversationid });
+        var conversationId = await _conversationRepository.GetByUsersIdAsync(id1, userId);
+        if (conversationId != null)
+            return RedirectToAction("Conversation", "Message", new { conversationId = conversationId });
 
         var conversationEntry = new ConversationEntity();
         await _conversationRepository.AddAsync(conversationEntry);

@@ -14,9 +14,9 @@ public class FileRepository(OvchegramDbContext dbContext, FileManager fileManage
         return fileEntry.Id;
     }
 
-    public async Task<string> GetFilePathByIdAsync(int id = -1)
+    public async Task<string> GetFilePathByIdAsync(int? id = null)
     {
-        if (id == -1) return "/UserUploads/default.png";
+        if (id == null) return "/UserUploads/default.png";
         var name = await dbContext.Files.FirstOrDefaultAsync(x => x.Id == id);
         return "/UserUploads/" + name.FileName;
     }

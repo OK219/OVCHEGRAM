@@ -24,6 +24,7 @@ public class ConversationRepository(OvchegramDbContext dbContext) : BaseReposito
     {
         return dbContext.UsersConversation
             .Include(x => x.User)
+            .Include(x => x.User.ProfilePic)
             .Where(x => x.ConversationId == conversationId)
             .Select(x => x.User);
     }
@@ -46,7 +47,8 @@ public class ConversationRepository(OvchegramDbContext dbContext) : BaseReposito
         return conversation.Id;
     }
 
-    private async Task AddEntriesGroupChatAsync(int conversationId, IEnumerable<int> usersId, string title, int fileId = 4)
+    private async Task AddEntriesGroupChatAsync(int conversationId, IEnumerable<int> usersId, string title,
+        int fileId = 4)
     {
         IEnumerable<UsersConversationEntity?> entries = usersId.Select(userId => new UsersConversationEntity
         {
@@ -103,15 +105,13 @@ public class ConversationRepository(OvchegramDbContext dbContext) : BaseReposito
         return await userConversations;
     }
 
-    public async Task<PersonalConversationsView?> GetByUsersIdAsync(int id1, int id2)
+    public async Task<int?> GetByUsersIdAsync(int id1, int id2)
     {
-        return await dbContext.PersonalConversationsView
-            .FirstOrDefaultAsync(x => x.uid1 == id1 && x.uid2 == id2 || x.uid2 == id1 && x.uid1 == id2);
-    }
-
-    public async Task<PersonalConversationsView?> GetByConversationId(int conversationId)
-    {
-        return await dbContext.PersonalConversationsView.FirstOrDefaultAsync(x => x.conversationid == conversationId);
+        var conversations = dbContext.UsersConversation.Join(dbContext.UsersConversation, x => x.ConversationId,
+            y => y.ConversationId, (x, y) => new { firstId = x.UserId, secondId = y.UserId, x.ConversationId });
+        var conversation = await conversations
+            .FirstOrDefaultAsync(x => x.firstId == id1 && x.secondId == id2 || x.secondId == id1 && x.firstId == id2);
+        return conversation?.ConversationId;
     }
 
     public async Task UpdateLastSeenMessageAsync(int conversationId, int userId, MessageEntity message)

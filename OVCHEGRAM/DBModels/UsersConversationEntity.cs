@@ -10,6 +10,6 @@ public class UsersConversationEntity
     public UserEntity User { get; set; }
     public int ConversationId { get; set; }
     public int? LastMessageSeenId { get; set; }
-    public MessageEntity LastMessageSeen { set; get; }
+    public MessageEntity? LastMessageSeen { set; get; }
     public ConversationEntity Conversation { get; set; }
 }
