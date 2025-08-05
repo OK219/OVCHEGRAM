@@ -1,0 +1,58 @@
+# Binaries and build artifacts
+bin/
+obj/
+out/
+publish/
+*.exe
+*.dll
+*.pdb
+*.cache
+*.nupkg
+
+# IDE and editor files
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.vscode
+_ReSharper.*
+*.swp
+*.swo
+
+# Dependencies
+packages/
+node_modules/
+jspm_packages/
+
+# Logs and test results
+*.log
+*.tmp
+TestResults/
+coverage/
+
+# Configs (exclude local/dev settings)
+appsettings.Development.json
+appsettings.Local.json
+appsettings.private.*
+*.env
+*.secret
+
+# Docker
+**/.dockerignore
+**/.env
+
+# Migrations (exclude everything except .cs files)
+**/Migrations/*.designer.cs
+**/Migrations/*.resx
+
+# Frontend (if applicable)
+dist/
+*.js.map
+*.css.map
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+**/UserUploads/
