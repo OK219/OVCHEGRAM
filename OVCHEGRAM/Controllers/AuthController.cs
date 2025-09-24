@@ -80,10 +80,8 @@ public class AuthController : Controller
             return View(model);
         }
 
-        var hashPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
-
         var user = await _userRepository.GetByNickNameAsync(model.Nickname);
-        if (user == null || user.Password != hashPassword)
+        if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
         {
             _logger.LogWarning("User not exist");
             ModelState.AddModelError("LoginError", "Неверный логин или пароль");
