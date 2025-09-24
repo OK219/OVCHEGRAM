@@ -1,5 +1,5 @@
 const urlParams = new URLSearchParams(window.location.search);
-const id = urlParams.get("conversationId");
+const id = parseInt(window.location.pathname.split('/').pop());
 const oldMessageLoading= document.getElementById('message-old-load');
 const uploadFile = document.getElementById('uploadFile');
 const modalSendBtn = document.getElementById('modalSendMessageBtn');
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const formData = new FormData();
         formData.append('conversationId', id);
         formData.append('message', input.value);
-        const response = fetch('/Message/SendMessage', {
+        const response = fetch('/messages', {
             method: 'POST',
             body: formData
         }).then(r => {
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 lastNewMessageId = newDateElements[newDateElements.length - 1].textContent;
                 lastOldMessageId = newDateElements[0].textContent;
             }
-            const response = await fetch(`/Message/LoadMessages?conversationId=${id}&lastMessageId=${takeOld ? lastOldMessageId || "" : lastNewMessageId || ""}&takeOld=${takeOld}`);
+            const response = await fetch(`/conversations/${id}/messages?lastMessageId=${takeOld ? lastOldMessageId || "" : lastNewMessageId || ""}&takeOld=${takeOld}`);
             const html = await response.text();
             if (html.length < 10 && takeOld) {
                 oldMessageObserver.unobserve(oldMessageLoading);
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
         formData.append('file', file);
         formData.append('isImage', file.type.startsWith('image/'));
 
-        const response = await fetch('/Message/SendMessage', {
+        const response = await fetch('/messages', {
             method: 'POST',
             body: formData
         });

@@ -12,6 +12,7 @@ using OVCHEGRAM.Extensions;
 namespace OVCHEGRAM.Controllers;
 
 [Authorize]
+[Route("")]
 public class MEController : Controller
 {
     private readonly ILogger<HomeController> _logger;
@@ -29,6 +30,7 @@ public class MEController : Controller
         _fileRepository = fileRepository;
     }
 
+    [HttpGet("users/{id:int}")]
     public async Task<IActionResult> Profile(int id)
     {
         var user = await _userRepository.GetByIdAsync(id);
@@ -36,16 +38,16 @@ public class MEController : Controller
         var isAllowed = id == User.GetUserId();
         return View((await Converter.ConvertToProfileModel(user), isAllowed));
     }
-    
-    [HttpGet]
+
+    [HttpGet("users")]
     public async Task<IActionResult> Users()
     {
         var users = await _userRepository.GetPageAsync();
         var use = await Task.WhenAll(users.Select(Converter.ConvertToProfileModel));
         return View(use);
     }
-    
-    [HttpGet]
+
+    [HttpGet("conversations")]
     public async Task<IActionResult> Conversations()
     {
         var conversations = await _conversationRepository.GetUsersLastConservationsDataAsync(User.GetUserId());
@@ -61,8 +63,8 @@ public class MEController : Controller
         return View(conversations);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> ChangeProfile(UserProfileModel newUserProfile)
+    [HttpPut("updateProfile")]
+    public async Task<IActionResult> UpdateProfile(UserProfileModel newUserProfile)
     {
         var userId = User.GetUserId();
         var user = await _userRepository.GetByIdAsync(userId);
@@ -81,13 +83,14 @@ public class MEController : Controller
         return RedirectToAction("Profile", new { id = user.Id });
     }
 
+    [HttpGet("logOut")]
     public async Task<IActionResult> LogOut()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         return RedirectToRoute(new { controller = "Home", action = "Index" });
     }
 
-    [HttpPost]
+    [HttpPost("createGroupChat")]
     public async Task<IActionResult> CreateGroupChat(string groupTitle, IFormFile file, IEnumerable<int> userIds)
     {
         int? fileId = null;
@@ -99,6 +102,7 @@ public class MEController : Controller
         return Ok(new { redirectUrl = Url.Action("Conversation", "Message", new { conversationId }) });
     }
 
+    [HttpGet("usersHtml")]
     public async Task<IActionResult> GetUsersHtml(int page = 1, string filter = "", int pageSize = 10)
     {
         var nextItemsTasks = await GetUsers(page, filter, pageSize);
@@ -106,6 +110,7 @@ public class MEController : Controller
         return PartialView("_PartialUsers", nextItems);
     }
 
+    [HttpGet("usersNamesHtml")]
     public async Task<IActionResult> GetUsersNamesHtml(int page = 1, string filter = "", int pageSize = 10)
     {
         var nextItemsTasks = await GetUsers(page, filter, pageSize);
@@ -113,6 +118,7 @@ public class MEController : Controller
         return PartialView("_PartialUsersNames", nextItems);
     }
 
+    [HttpPost("personalConversations")]
     public async Task<IActionResult> RedirectToPersonalConversation(int id1)
     {
         var userId = User.GetUserId();
@@ -125,7 +131,7 @@ public class MEController : Controller
         await _conversationRepository.AddEntriesPersonalChatAsync(conversationEntry.Id, id1, userId);
         return RedirectToAction("Conversation", "Message", new { conversationId = conversationEntry.Id });
     }
-    
+
     private async Task<List<UserEntity>> GetUsers(int page = 1, string filter = "", int pageSize = 10)
     {
         filter = filter.ToLower();

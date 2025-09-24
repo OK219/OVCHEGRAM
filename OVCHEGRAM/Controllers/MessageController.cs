@@ -10,6 +10,7 @@ using OVCHEGRAM.Models;
 namespace OVCHEGRAM.Controllers;
 
 [Authorize]
+[Route("")]
 public class MessageController : Controller
 {
     private readonly ILogger<HomeController> _logger;
@@ -29,6 +30,7 @@ public class MessageController : Controller
         _userRepository = userRepository;
     }
 
+    [HttpGet("conversations/{conversationId}")]
     public async Task<IActionResult> Conversation(int conversationId)
     {
         var userId = User.GetUserId();
@@ -44,7 +46,7 @@ public class MessageController : Controller
             await Converter.ConvertManyToUserProfile(users.ToList())));
     }
 
-    [HttpPost]
+    [HttpPost("messages")]
     public async Task SendMessage(int conversationId, string? message, IFormFile file = null, bool isImage = false)
     {
         var messageEntity = new MessageEntity()
@@ -61,7 +63,7 @@ public class MessageController : Controller
         await _conversationRepository.UpdateAsync(conversationEntity);
     }
 
-    [HttpGet]
+    [HttpGet("conversations/{conversationId}/messages")]
     public async Task<IActionResult> LoadMessages(int conversationId, int lastMessageId = 0, bool takeOld = false,
         int pageSize = 20)
     {

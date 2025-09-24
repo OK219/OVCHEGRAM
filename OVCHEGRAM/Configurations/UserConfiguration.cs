@@ -11,7 +11,7 @@ public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
         builder.Property(x => x.FirstName).HasMaxLength(30).IsRequired();
         builder.Property(x => x.SecondName).HasMaxLength(30).IsRequired();
         builder.Property(x => x.Nickname).HasMaxLength(30).IsRequired();
-        builder.Property(x => x.Password).HasMaxLength(30).IsRequired();
+        builder.Property(x => x.Password).HasMaxLength(60).IsRequired();
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd();

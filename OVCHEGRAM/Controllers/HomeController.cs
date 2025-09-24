@@ -20,11 +20,11 @@ public class HomeController : Controller
         if (!User.Identity.IsAuthenticated) return View();
         var id = User.GetUserId();
         return RedirectToAction("Profile", "ME", new { id });
-
     }
 
     public IActionResult ZUEV()
     {
+        _logger.LogInformation("pashalka");
         return View();
     }
 

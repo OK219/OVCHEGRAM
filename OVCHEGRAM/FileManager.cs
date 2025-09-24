@@ -23,7 +23,7 @@ public class FileManager
         return uniqueFileName;
     }
 
-    public string GetFullPath(string fileName)
+    private string GetFullPath(string fileName)
     {
         return Path.Combine(fileDirectory, fileName);
     }

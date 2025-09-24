@@ -25,6 +25,7 @@ public class AuthController : Controller
     [HttpGet]
     public IActionResult Registration()
     {
+        _logger.LogInformation("Registration process started");
         return View();
     }
 
@@ -33,6 +34,7 @@ public class AuthController : Controller
     {
         if (!ModelState.IsValid)
         {
+            _logger.LogWarning("Registration model invalid");
             return View(model);
         }
 
@@ -42,10 +44,12 @@ public class AuthController : Controller
             return View(model);
         }
 
+        var hashPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
+
         var userEntry = new UserEntity()
         {
             FirstName = model.FirstName, SecondName = model.SecondName, Gender = model.Gender,
-            Nickname = model.Nickname, Password = model.Password, Town = model.Town,
+            Nickname = model.Nickname, Password = hashPassword, Town = model.Town,
             Messages = new List<MessageEntity>(),
             UsersConversations = new List<UsersConversationEntity>()
         };
@@ -54,14 +58,16 @@ public class AuthController : Controller
             var fileId = _fileRepository.UploadFileAsync(model.File);
             userEntry.ProfilePicId = await fileId;
         }
+
         await _userRepository.AddAsync(userEntry);
         GetClaimsPrincipal(model, userEntry.Id);
-        return RedirectToAction("Profile","ME", new {id = userEntry.Id});
+        return RedirectToAction("Profile", "ME", new { id = userEntry.Id });
     }
 
     [HttpGet]
     public IActionResult Login()
     {
+        _logger.LogInformation("Login process started");
         return View();
     }
 
@@ -70,12 +76,16 @@ public class AuthController : Controller
     {
         if (!ModelState.IsValid)
         {
+            _logger.LogWarning("Login model invalid");
             return View(model);
         }
 
+        var hashPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
+
         var user = await _userRepository.GetByNickNameAsync(model.Nickname);
-        if (user == null || user.Password != model.Password)
+        if (user == null || user.Password != hashPassword)
         {
+            _logger.LogWarning("User not exist");
             ModelState.AddModelError("LoginError", "Неверный логин или пароль");
             return View(model);
         }
@@ -89,7 +99,7 @@ public class AuthController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
-    
+
     private async void GetClaimsPrincipal(IAuthModel model, int id)
     {
         var claims = new List<Claim>
