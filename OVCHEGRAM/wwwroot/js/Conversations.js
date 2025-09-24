@@ -18,14 +18,15 @@ document.addEventListener('DOMContentLoaded', function () {
             file = fileUpload.files[0];
         }
         const formData = new FormData();
-        formData.append('userIds', Array.from(userIds).map(Number));
         formData.append('groupTitle', groupTitle.value);
         if (fileUpload.files.length > 0) {
             file = fileUpload.files[0];
             formData.append('file', file);
         }
+        
+        userIds.forEach(x => formData.append('userIds', Number(x)));
 
-        const response = await fetch('/ME/CreateGroupChat', {
+        const response = await fetch('/createGroupChat', {
             method: 'POST',
             body: formData
         })
@@ -55,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     userInput.addEventListener('input', async () => {
         if (userInput.value.length > 0) {
-            const response = await fetch(`/ME/GetUsersNamesHtml?page=${1}&filter=${userInput.value}`);
+            const response = await fetch(`/usersNamesHtml?page=${1}&filter=${userInput.value}`);
             userList.innerHTML = await response.text();
             userNames = document.querySelectorAll('.user');
             userNames.forEach(user => {

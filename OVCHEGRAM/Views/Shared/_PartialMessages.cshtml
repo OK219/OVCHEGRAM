@@ -48,7 +48,8 @@
                 }
                 else
                 {
-                    <a href="@item.FilePath" download>@item.FilePath.Split('/')[^1].Split('_')[^1]</a>
+                    var fileName = @item.FilePath.Split('/')[^1].Split('_')[^1];
+                    <a href="@item.FilePath" download="@fileName">@fileName</a>
                 }
             }
             @if (!string.IsNullOrEmpty(item.Content))

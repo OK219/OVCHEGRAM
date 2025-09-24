@@ -63,7 +63,7 @@ public class MEController : Controller
         return View(conversations);
     }
 
-    [HttpPut("updateProfile")]
+    [HttpPost("updateProfile")]
     public async Task<IActionResult> UpdateProfile(UserProfileModel newUserProfile)
     {
         var userId = User.GetUserId();
@@ -80,6 +80,7 @@ public class MEController : Controller
         }
 
         await _userRepository.UpdateAsync(user);
+        await _conversationRepository.UpdateUsersConversation(userId);
         return RedirectToAction("Profile", new { id = user.Id });
     }
 

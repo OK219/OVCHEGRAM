@@ -122,4 +122,32 @@ public class ConversationRepository(OvchegramDbContext dbContext) : BaseReposito
         usersConversationEntity.LastMessageSeenId = message.Id;
         await dbContext.SaveChangesAsync();
     }
+
+    public List<ConversationEntity> GetConversationsByUserId(int userId)
+    {
+        var conversationIds = dbContext.UsersConversation
+            .Where(x => x.UserId == userId)
+            .Select(x => x.ConversationId);
+        return dbContext.Conversations
+            .Where(x => conversationIds.Contains(x.Id))
+            .ToList();
+    }
+
+    public async Task UpdateUsersConversation(int userId)
+    {
+        var user = dbContext.Users
+            .FirstOrDefault(x => x.Id == userId);
+        var conversationEntities = GetConversationsByUserId(userId)
+            .Where(x => !x.IsGroupChat)
+            .Select(x => x.Id);
+        var userConversationEntities = dbContext.UsersConversation
+            .Where(x => conversationEntities.Contains(x.ConversationId) && x.UserId != userId);
+        foreach (var entity in userConversationEntities)
+        {
+            entity.Title = user.FirstName + " " + user.SecondName;
+            entity.PictureId = user.ProfilePicId;
+        }
+
+        await dbContext.SaveChangesAsync();
+    }
 }

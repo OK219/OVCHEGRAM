@@ -4,7 +4,7 @@ const filter = document.getElementById('filter');
 
 async function loadUsers() {
     page++;
-    const response = await fetch(`/ME/GetUsersHtml?page=${page}&filter=${filter.value}`);
+    const response = await fetch(`/usersHtml?page=${page}&filter=${filter.value}`);
     const html = await response.text();
     if (html.length < 10) {
         observer.unobserve(loading)
