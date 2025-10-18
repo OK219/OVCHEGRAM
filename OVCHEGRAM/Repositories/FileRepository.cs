@@ -21,7 +21,7 @@ public class FileRepository(OvchegramDbContext dbContext, FileManager fileManage
         return "/UserUploads/" + name.FileName;
     }
     
-    public static string GetFilePathByName(string name = null)
+    public static string GetFilePathByName(string? name = null)
     {
         if (string.IsNullOrEmpty(name)) return "/Pictures/default.png";
         return "/UserUploads/" + name;

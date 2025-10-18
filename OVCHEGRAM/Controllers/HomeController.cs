@@ -19,7 +19,7 @@ public class HomeController : Controller
     {
         if (!User.Identity.IsAuthenticated) return View();
         var id = User.GetUserId();
-        return RedirectToAction("Profile", "ME", new { id });
+        return RedirectToAction("Profile", "Profile", new { id });
     }
 
     public IActionResult ZUEV()

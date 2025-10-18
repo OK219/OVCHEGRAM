@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OVCHEGRAM.Models;
 
-public class RegistrationViewModel : IAuthModel
+public class RegistrationViewModel
 {
     [Required(ErrorMessage = "Введите имя пожалуйста")]
     public string FirstName { get; set; }

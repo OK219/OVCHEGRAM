@@ -7,7 +7,7 @@ public class MessageEntity
     public ConversationEntity Conversation { get; set; }
     public int UserId { get; set; }
     public UserEntity User { get; set; }
-    public DateTime CreateTime { get; set; }
+    public DateTime SendTime { get; set; }
     public int? FileId { get; set; }
     public FileEntity File { get; set; }
     public List<UsersConversationEntity> UsersConversation { get; set; }

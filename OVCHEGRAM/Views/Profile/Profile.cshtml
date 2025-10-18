@@ -1,5 +1,5 @@
 @using System.Security.Claims
-@model (UserProfileModel, bool)
+@model (UserUpdateDto user, bool isAllowed, string filePath)
 
 @{
     Layout = "_OvchegramLayout";
@@ -12,7 +12,7 @@
 
 <div class="text-center">
     <div id="userInfo">
-        <img src="@user.FilePath" alt="oi" id="profilePic"/>
+        <img src="@Model.filePath" alt="oi" id="profilePic"/>
         <h1 id="userName">@user.FirstName @user.SecondName</h1>
         <p id="userGender">@user.Gender</p>
         <p id="userTown">@user.Town</p>
@@ -20,18 +20,18 @@
         {
             <button id="editBtn">Редактировать</button>
             <form>
-                <button type="submit" asp-controller="ME" asp-action="LogOut">Выйти</button>
+                <button type="submit" asp-controller="Profile" asp-action="LogOut">Выйти</button>
             </form>
         }
     </div>
     <div id="userEdit">
-        <form asp-controller="ME" asp-action="UpdateProfile" method="post" enctype="multipart/form-data">
+        <form asp-controller="Profile" asp-action="UpdateProfile" method="post" enctype="multipart/form-data">
             <div id="profileEditPic">
-                <img src="@user.FilePath" alt="oi" id="imgPreview">
+                <img src="@Model.filePath" alt="oi" id="imgPreview">
             </div>
             <label for="fileLoad">
                 Изменить аватар
-                <input type="file" name="File" id="fileLoad" asp-for="Item1.File" accept="image/*" style="display: none"/>
+                <input type="file" name="ProfilePicture" id="fileLoad" asp-for="Item1.ProfilePicture" accept="image/*" style="display: none"/>
             </label>
             <input name="FirstName" asp-for="Item1.FirstName"/>
             <input name="SecondName" asp-for="Item1.SecondName"/>

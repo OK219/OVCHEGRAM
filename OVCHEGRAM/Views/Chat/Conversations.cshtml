@@ -43,10 +43,10 @@
 @foreach (var conversation in @Model)
 {
     var messageTime = conversation.LastMessageTime.Hour + ":" + (conversation.LastMessageTime.Minute > 9 ? "" : "0") + conversation.LastMessageTime.Minute;
-    <a asp-controller="Message" asp-action="Conversation" asp-route-conversationId=@conversation.ConversationId>
+    <a asp-controller="Chat" asp-action="Conversation" asp-route-conversationId=@conversation.ConversationId>
         <div class="conversation">
-            <img class="profilePic" src="@conversation.ConversationPictureName" alt="oi"/>
-            <p class="conversationTitle">@conversation.ConversationTitle</p>
+            <img class="profilePic" src="@conversation.PicturePath" alt="oi"/>
+            <p class="conversationTitle">@conversation.Title</p>
             <p class="conversationLastMessage">@conversation.LastMessageContent</p>
             <p class="conversationLastMessageTime">@conversation.LastMessageTime.Day @months[conversation.LastMessageTime.Month] @conversation.LastMessageTime.Year @messageTime</p>
             @if (conversation.HasNewMessages)

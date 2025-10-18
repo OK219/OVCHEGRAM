@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
         
         userIds.forEach(x => formData.append('userIds', Number(x)));
 
-        const response = await fetch('/createGroupChat', {
+        const response = await fetch('/Chat/createGroupChat', {
             method: 'POST',
             body: formData
         })
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     userInput.addEventListener('input', async () => {
         if (userInput.value.length > 0) {
-            const response = await fetch(`/usersNamesHtml?page=${1}&filter=${userInput.value}`);
+            const response = await fetch(`/Profile/usersNamesHtml?page=${1}&filter=${userInput.value}`);
             userList.innerHTML = await response.text();
             userNames = document.querySelectorAll('.user');
             userNames.forEach(user => {

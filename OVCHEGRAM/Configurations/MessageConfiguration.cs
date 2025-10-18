@@ -23,6 +23,6 @@ public class MessageConfiguration : IEntityTypeConfiguration<MessageEntity>
         builder.HasOne(x => x.File)
             .WithMany(x => x.Messages)
             .OnDelete(DeleteBehavior.Cascade);
-        builder.Property(x => x.CreateTime).HasDefaultValueSql("NOW()");
+        builder.Property(x => x.SendTime).HasDefaultValueSql("NOW()");
     }
 }

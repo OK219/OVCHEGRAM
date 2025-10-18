@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const formData = new FormData();
         formData.append('conversationId', id);
         formData.append('message', input.value);
-        const response = fetch('/messages', {
+        const response = fetch('/Chat/sendMessage', {
             method: 'POST',
             body: formData
         }).then(r => {
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 lastNewMessageId = newDateElements[newDateElements.length - 1].textContent;
                 lastOldMessageId = newDateElements[0].textContent;
             }
-            const response = await fetch(`/conversations/${id}/messages?lastMessageId=${takeOld ? lastOldMessageId || "" : lastNewMessageId || ""}&takeOld=${takeOld}`);
+            const response = await fetch(`/Chat/loadMessages/${id}?lastMessageId=${takeOld ? lastOldMessageId || "" : lastNewMessageId || ""}&takeOld=${takeOld}`);
             const html = await response.text();
             if (html.length < 10 && takeOld) {
                 oldMessageObserver.unobserve(oldMessageLoading);
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
         formData.append('file', file);
         formData.append('isImage', file.type.startsWith('image/'));
 
-        const response = await fetch('/messages', {
+        const response = await fetch('/Chat/sendMessage', {
             method: 'POST',
             body: formData
         });

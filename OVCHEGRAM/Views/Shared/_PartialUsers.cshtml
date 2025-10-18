@@ -1,19 +1,15 @@
 @using System.Security.Claims
-@model IEnumerable<UserProfileModel>
+@model IEnumerable<UserPartialDto>
 
-@foreach (var item in Model)
+@foreach (var user in Model)
 {
-    @if (int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)) != item.Id)
-    {
-        <a class="userLink" asp-controller="ME" asp-action="Profile" asp-route-id="@item.Id">
-            <div class="user">
-                <img class="profilePic" src="@item.FilePath" alt="@item.Id profilePic">
-                <p>@item.FirstName @item.SecondName</p>
-                <form asp-controller="ME" asp-action="RedirectToPersonalConversation" asp-route-id1="@item.Id">
-                    <button type="submit">написать</button>
-                </form>
-
-            </div>
-        </a>
-    }
+    <a class="userLink" asp-controller="Profile" asp-action="Profile" asp-route-id="@user.Id">
+        <div class="user">
+            <img class="profilePic" src="@user.FilePath" alt="@user.Id profilePic">
+            <p>@user.FirstName @user.SecondName</p>
+            <form asp-controller="Chat" asp-action="RedirectToPersonalConversation" asp-route-id1="@user.Id">
+                <button type="submit">написать</button>
+            </form>
+        </div>
+    </a>
 }

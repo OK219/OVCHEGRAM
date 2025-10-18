@@ -34,7 +34,7 @@
     <div class="fullMessage">
         @if (messageClass == "message")
         {
-            <a asp-controller="ME" asp-action="Profile" asp-route-id="@item.UserId">
+            <a asp-controller="Profile" asp-action="Profile" asp-route-id="@item.UserId">
                 <img class="profilePic" src="@item.ProfilePicPath" alt="oi"/>
                 <p class="userName">@item.SenderName</p>
             </a>

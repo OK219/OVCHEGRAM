@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OVCHEGRAM.Models;
 
-public class LoginViewModel : IAuthModel
+public class LoginViewModel
 {
     public string Nickname { get; set; }
     public string Password { get; set; }

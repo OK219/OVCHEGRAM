@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OVCHEGRAM.Models;
 
-public class UserProfileModel
+public class UserDto : IUserDto
 {
     [Required(ErrorMessage = "Введите имя пожалуйста")]
     public string FirstName { get; set; }
@@ -12,7 +12,7 @@ public class UserProfileModel
     public string Town { get; set; }
     [Required(ErrorMessage = "Укажите ваш пол, пожалуйста")]
     public Gender? Gender { get; set; }
-    public string FilePath { get; set; }
-    public int Id { get; set; }
-    public IFormFile? File { get; set; }
+    // public string FilePath { get; set; }
+    // public int Id { get; set; }
+    // public IFormFile? File { get; set; }
 }

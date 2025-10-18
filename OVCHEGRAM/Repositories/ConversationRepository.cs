@@ -29,16 +29,14 @@ public class ConversationRepository(OvchegramDbContext dbContext) : BaseReposito
             .Select(x => x.User);
     }
 
-    public async Task<int> CreateGroupChatAsync(List<int> userIds, string groupTitle, int curUser, int? fileId)
+    public async Task<int> CreateGroupChatAsync(List<int> userIds, string groupTitle, int? fileId)
     {
         await using var transaction = await dbContext.Database.BeginTransactionAsync();
         var conversation = new ConversationEntity() { IsGroupChat = true };
         await AddAsync(conversation);
-        userIds.Add(curUser);
-
         await AddEntriesGroupChatAsync(conversation.Id, userIds, groupTitle, fileId);
         var firstMessage = new MessageEntity()
-            { Content = $"Беседа {groupTitle} создана", ConversationId = conversation.Id, UserId = curUser };
+            { Content = $"Беседа {groupTitle} создана", ConversationId = conversation.Id, UserId = userIds.Last() };
         dbContext.Messages.Add(firstMessage);
         await dbContext.SaveChangesAsync();
         conversation.LastMessageId = firstMessage.Id;
@@ -82,30 +80,7 @@ public class ConversationRepository(OvchegramDbContext dbContext) : BaseReposito
         await transaction.CommitAsync();
     }
 
-    public async Task<List<ConversationModel>> GetUsersLastConservationsDataAsync(int userId)
-    {
-        var userConversations = dbContext.UsersConversation
-            .Where(x => x.UserId == userId)
-            .Join(dbContext.Conversations, x => x.ConversationId, x => x.Id,
-                (x, y) => new
-                {
-                    x.ConversationId, y.LastMessageId, LastMessageSeenId = x.LastMessageSeenId, x.PictureId, x.Title
-                })
-            .Join(dbContext.Messages, x => x.LastMessageId, x => x.Id,
-                (x, y) => new ConversationModel()
-                {
-                    ConversationId = x.ConversationId, LastMessageContent = y.Content,
-                    LastMessageTime = y.CreateTime.ToLocalTime(),
-                    ConversationTitle = x.Title, ConversationPictureId = x.PictureId,
-                    HasNewMessages = y.Id != x.LastMessageSeenId
-                })
-            .OrderByDescending(x => x.LastMessageTime)
-            .ToListAsync();
-
-        return await userConversations;
-    }
-
-    public async Task<int?> GetByUsersIdAsync(int id1, int id2)
+    public async Task<int?> GetPersonalConversationId(int id1, int id2)
     {
         var conversations = dbContext.UsersConversation.Join(dbContext.UsersConversation, x => x.ConversationId,
             y => y.ConversationId, (x, y) => new { firstId = x.UserId, secondId = y.UserId, x.ConversationId });
@@ -114,12 +89,12 @@ public class ConversationRepository(OvchegramDbContext dbContext) : BaseReposito
         return conversation?.ConversationId;
     }
 
-    public async Task UpdateLastSeenMessageAsync(int conversationId, int userId, MessageEntity message)
+    public async Task UpdateLastSeenMessageAsync(int conversationId, int userId, int messageId)
     {
         var usersConversationEntity =
             await dbContext.UsersConversation.FirstOrDefaultAsync(x =>
                 x.ConversationId == conversationId && x.UserId == userId);
-        usersConversationEntity.LastMessageSeenId = message.Id;
+        usersConversationEntity.LastMessageSeenId = messageId;
         await dbContext.SaveChangesAsync();
     }
 
@@ -130,6 +105,13 @@ public class ConversationRepository(OvchegramDbContext dbContext) : BaseReposito
             .Select(x => x.ConversationId);
         return dbContext.Conversations
             .Where(x => conversationIds.Contains(x.Id))
+            .ToList();
+    }
+
+    public List<UsersConversationEntity> GetUsersConversations(int userId)
+    {
+        return dbContext.UsersConversation
+            .Where(x => x.UserId == userId)
             .ToList();
     }
 

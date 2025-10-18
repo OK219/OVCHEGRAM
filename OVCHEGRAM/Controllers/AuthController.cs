@@ -1,36 +1,42 @@
 using System.Diagnostics;
 using System.Security.Claims;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using OVCHEGRAM.DBModels;
 using OVCHEGRAM.Models;
 using OVCHEGRAM.Repositories;
+using OVCHEGRAM.Services;
 
 namespace OVCHEGRAM.Controllers;
 
+[Route("/[controller]")]
 public class AuthController : Controller
 {
     private readonly ILogger<AuthController> _logger;
     private readonly UserRepository _userRepository;
-    private readonly FileRepository _fileRepository;
+    private readonly UserService _userService;
+    private readonly IMapper _mapper;
 
-    public AuthController(ILogger<AuthController> logger, UserRepository userRepository, FileRepository fileRepository)
+    public AuthController(ILogger<AuthController> logger, UserRepository userRepository,
+        UserService userService, IMapper mapper)
     {
         _logger = logger;
         _userRepository = userRepository;
-        _fileRepository = fileRepository;
+        _userService = userService;
+        _mapper = mapper;
     }
 
-    [HttpGet]
+    [HttpGet("/[action]")]
     public IActionResult Registration()
     {
         _logger.LogInformation("Registration process started");
         return View();
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Registration(RegistrationViewModel model)
+    [HttpPost("/[action]")]
+    public async Task<IActionResult> Registration([FromForm] RegistrationViewModel model)
     {
         if (!ModelState.IsValid)
         {
@@ -44,34 +50,21 @@ public class AuthController : Controller
             return View(model);
         }
 
-        var hashPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
+        var userCreateDto = _mapper.Map<UserCreateDto>(model);
+        var userId = await _userService.CreateUser(userCreateDto);
 
-        var userEntry = new UserEntity()
-        {
-            FirstName = model.FirstName, SecondName = model.SecondName, Gender = model.Gender,
-            Nickname = model.Nickname, Password = hashPassword, Town = model.Town,
-            Messages = new List<MessageEntity>(),
-            UsersConversations = new List<UsersConversationEntity>()
-        };
-        if (model.File != null)
-        {
-            var fileId = _fileRepository.UploadFileAsync(model.File);
-            userEntry.ProfilePicId = await fileId;
-        }
-
-        await _userRepository.AddAsync(userEntry);
-        GetClaimsPrincipal(model, userEntry.Id);
-        return RedirectToAction("Profile", "ME", new { id = userEntry.Id });
+        GetClaimsPrincipal(userId, model.Nickname, model.StayLogIn);
+        return RedirectToAction("Profile", "Profile", new { id = userId });
     }
 
-    [HttpGet]
+    [HttpGet("/[action]")]
     public IActionResult Login()
     {
         _logger.LogInformation("Login process started");
         return View();
     }
 
-    [HttpPost]
+    [HttpPost("/[action]")]
     public async Task<IActionResult> Login(LoginViewModel model)
     {
         if (!ModelState.IsValid)
@@ -79,6 +72,7 @@ public class AuthController : Controller
             _logger.LogWarning("Login model invalid");
             return View(model);
         }
+
 
         var user = await _userRepository.GetByNickNameAsync(model.Nickname);
         if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
@@ -88,29 +82,23 @@ public class AuthController : Controller
             return View(model);
         }
 
-        GetClaimsPrincipal(model, user.Id);
-        return RedirectToRoute(new { controller = "ME", action = "Profile", id = user.Id });
+        GetClaimsPrincipal(user.Id, model.Nickname, model.StayLogIn);
+        return RedirectToRoute(new { controller = "Profile", action = "Profile", id = user.Id });
     }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
-
-    private async void GetClaimsPrincipal(IAuthModel model, int id)
+    private async void GetClaimsPrincipal(int id, string nickname, bool stayLogIn)
     {
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, model.Nickname),
+            new Claim(ClaimTypes.Name, nickname),
             new Claim(ClaimTypes.NameIdentifier, id.ToString())
         };
 
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         var authProperties = new AuthenticationProperties
         {
-            IsPersistent = model.StayLogIn,
-            ExpiresUtc = model.StayLogIn ? DateTimeOffset.UtcNow.AddDays(30) : null
+            IsPersistent = stayLogIn,
+            ExpiresUtc = stayLogIn ? DateTimeOffset.UtcNow.AddDays(30) : null
         };
         await HttpContext.SignInAsync(
             CookieAuthenticationDefaults.AuthenticationScheme,
